@@ -1,0 +1,44 @@
+---
+- name: Configurar servidor web Apache
+  hosts: web
+  become: true
+
+  vars:
+    page_title: Test Infra Lab
+
+  tasks:
+    - name: Atualizar os pacotes
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+        upgrade: safe
+
+    - name: Instalar o Apache
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+
+    - name: Iniciar o Apache e habilitar na inicialização
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Criar a página HTML
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: "0644"
+        content: |
+          <!DOCTYPE html>
+          <html lang="pt-BR">
+            <head>
+              <meta charset="utf-8">
+              <title>{{ page_title }}</title>
+            </head>
+            <body>
+              <h1>{{ page_title }}</h1>
+              <p>Servidor Apache configurado com Ansible em uma VM Vagrant.</p>
+            </body>
+          </html>

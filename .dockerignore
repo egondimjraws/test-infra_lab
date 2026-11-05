@@ -1,0 +1,6 @@
+# Mantém a chave privada do Vagrant fora do contexto de build.
+.vagrant/
+.git/
+.pytest_cache/
+__pycache__/
+*.log
